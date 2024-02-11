@@ -1,0 +1,82 @@
+<html>
+<head>
+<title>main.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #6aab73;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+main.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">time</span>
+
+<span class="s0">import </span><span class="s1">pytest</span>
+<span class="s0">from </span><span class="s1">selenium </span><span class="s0">import </span><span class="s1">webdriver</span>
+<span class="s0">from </span><span class="s1">selenium</span><span class="s2">.</span><span class="s1">webdriver</span><span class="s2">.</span><span class="s1">common</span><span class="s2">.</span><span class="s1">by </span><span class="s0">import </span><span class="s1">By</span>
+
+<span class="s3"># Define a fixture to initialize the browser</span>
+<span class="s2">@</span><span class="s1">pytest</span><span class="s2">.</span><span class="s1">fixture</span>
+<span class="s0">def </span><span class="s1">setup</span><span class="s2">():</span>
+    <span class="s1">driver </span><span class="s2">= </span><span class="s1">webdriver</span><span class="s2">.</span><span class="s1">Chrome</span><span class="s2">()  </span><span class="s3"># Assuming you're using Chrome. You can change this to another browser if needed.</span>
+    <span class="s0">yield </span><span class="s1">driver</span>
+    <span class="s1">driver</span><span class="s2">.</span><span class="s1">quit</span><span class="s2">()</span>
+
+<span class="s3"># Define a generic function to log in</span>
+<span class="s0">def </span><span class="s1">login</span><span class="s2">(</span><span class="s1">driver</span><span class="s2">, </span><span class="s1">username</span><span class="s2">, </span><span class="s1">password</span><span class="s2">):</span>
+    <span class="s1">driver</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s4">&quot;https://www.saucedemo.com/&quot;</span><span class="s2">)</span>
+    <span class="s1">driver</span><span class="s2">.</span><span class="s1">find_element</span><span class="s2">(</span><span class="s1">By</span><span class="s2">.</span><span class="s1">ID</span><span class="s2">, </span><span class="s4">&quot;user-name&quot;</span><span class="s2">).</span><span class="s1">send_keys</span><span class="s2">(</span><span class="s1">username</span><span class="s2">)</span>
+    <span class="s1">driver</span><span class="s2">.</span><span class="s1">find_element</span><span class="s2">(</span><span class="s1">By</span><span class="s2">.</span><span class="s1">ID</span><span class="s2">, </span><span class="s4">&quot;password&quot;</span><span class="s2">).</span><span class="s1">send_keys</span><span class="s2">(</span><span class="s1">password</span><span class="s2">)</span>
+    <span class="s1">driver</span><span class="s2">.</span><span class="s1">find_element</span><span class="s2">(</span><span class="s1">By</span><span class="s2">.</span><span class="s1">ID</span><span class="s2">, </span><span class="s4">&quot;login-button&quot;</span><span class="s2">).</span><span class="s1">click</span><span class="s2">()</span>
+
+<span class="s3"># Define a generic function to verify the presence of an element</span>
+<span class="s0">def </span><span class="s1">add_to_cart</span><span class="s2">(</span><span class="s1">driver</span><span class="s2">):</span>
+
+
+    <span class="s1">driver</span><span class="s2">.</span><span class="s1">find_element</span><span class="s2">(</span><span class="s1">By</span><span class="s2">.</span><span class="s1">XPATH</span><span class="s2">,</span><span class="s4">f&quot;//button[@id='add-to-cart-sauce-labs-backpack']&quot;</span><span class="s2">).</span><span class="s1">click</span><span class="s2">()</span>
+    <span class="s1">driver</span><span class="s2">.</span><span class="s1">find_element</span><span class="s2">(</span><span class="s1">By</span><span class="s2">.</span><span class="s1">XPATH</span><span class="s2">, </span><span class="s4">f&quot;//body/div[@id='root']/div[@id='page_wrapper']/div[@id='contents_wrapper']/div[@id='header_container']/div[1]/div[3]/a[1]&quot;</span><span class="s2">).</span><span class="s1">click</span><span class="s2">()</span>
+
+
+
+
+
+<span class="s0">def </span><span class="s1">added_item_present</span><span class="s2">(</span><span class="s1">driver</span><span class="s2">):</span>
+    <span class="s1">cart_item</span><span class="s2">=</span><span class="s1">driver</span><span class="s2">.</span><span class="s1">find_element</span><span class="s2">(</span><span class="s1">By</span><span class="s2">.</span><span class="s1">XPATH </span><span class="s2">,</span><span class="s4">f&quot;//div[text()='Sauce Labs Backpack']&quot;</span><span class="s2">)</span>
+    <span class="s0">assert </span><span class="s1">cart_item </span><span class="s0">is not None</span><span class="s2">, </span><span class="s4">&quot;Element is not present on the page.&quot;</span>
+
+<span class="s0">def </span><span class="s1">menu</span><span class="s2">(</span><span class="s1">driver</span><span class="s2">):</span>
+    <span class="s1">driver</span><span class="s2">.</span><span class="s1">find_element</span><span class="s2">(</span><span class="s1">By</span><span class="s2">.</span><span class="s1">XPATH</span><span class="s2">, </span><span class="s4">f&quot;//button[@id='react-burger-menu-btn']&quot;</span><span class="s2">).</span><span class="s1">click</span><span class="s2">()</span>
+<span class="s0">def </span><span class="s1">logout</span><span class="s2">(</span><span class="s1">driver</span><span class="s2">):</span>
+    <span class="s1">driver</span><span class="s2">.</span><span class="s1">find_element</span><span class="s2">(</span><span class="s1">By</span><span class="s2">.</span><span class="s1">XPATH</span><span class="s2">,</span><span class="s4">f&quot;//a[@id='logout_sidebar_link']&quot;</span><span class="s2">).</span><span class="s1">click</span><span class="s2">()</span>
+
+
+<span class="s3"># Define the test function for the case study</span>
+<span class="s0">def </span><span class="s1">test_case_study</span><span class="s2">(</span><span class="s1">setup</span><span class="s2">):</span>
+    <span class="s1">username </span><span class="s2">= </span><span class="s4">&quot;standard_user&quot;</span>
+    <span class="s1">password </span><span class="s2">= </span><span class="s4">&quot;secret_sauce&quot;</span>
+    <span class="s1">login</span><span class="s2">(</span><span class="s1">setup</span><span class="s2">,</span><span class="s1">username</span><span class="s2">,</span><span class="s1">password</span><span class="s2">)</span>
+    <span class="s1">add_to_cart</span><span class="s2">(</span><span class="s1">setup</span><span class="s2">)</span>
+    <span class="s1">added_item_present</span><span class="s2">(</span><span class="s1">setup</span><span class="s2">)</span>
+    <span class="s1">print</span><span class="s2">(</span><span class="s4">&quot;element is present&quot;</span><span class="s2">)</span>
+    <span class="s1">menu</span><span class="s2">(</span><span class="s1">setup</span><span class="s2">)</span>
+    <span class="s1">time</span><span class="s2">.</span><span class="s1">sleep</span><span class="s2">(</span><span class="s5">2</span><span class="s2">)</span>
+    <span class="s1">logout</span><span class="s2">(</span><span class="s1">setup</span><span class="s2">)</span>
+    <span class="s1">time</span><span class="s2">.</span><span class="s1">sleep</span><span class="s2">(</span><span class="s5">2</span><span class="s2">)</span>
+
+
+
+
+
+
+
+</pre>
+</body>
+</html>
